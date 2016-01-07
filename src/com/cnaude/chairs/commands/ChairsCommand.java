@@ -22,7 +22,7 @@ public class ChairsCommand implements CommandExecutor {
         }
         if (args[0].equalsIgnoreCase("reload")) {
             if (sender.hasPermission("chairs.reload")) {
-                plugin.loadConfig();
+                plugin.reloadConfig();
                 if (plugin.isSitHealEnabled()) {
                     plugin.getChairEffects().restartHealing();
                 } else {

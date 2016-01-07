@@ -99,36 +99,41 @@ public class Chairs extends JavaPlugin {
         psitdata = null;
     }
 
-    public void loadConfig() {
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(this.getDataFolder(), "config.yml"));
-        autoRotate = config.getBoolean("auto-rotate");
-        signCheck = config.getBoolean("sign-check");
-        distance = config.getDouble("distance");
-        maxChairWidth = config.getInt("max-chair-width");
-        notifyplayer = config.getBoolean("notify-player");
-        ignoreIfBlockInHand = config.getBoolean("ignore-if-item-in-hand");
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        loadConfig();
+    }
 
-        sitHealEnabled = config.getBoolean("sit-effects.healing.enabled", false);
-        sitHealInterval = config.getInt("sit-effects.healing.interval", 20);
-        sitMaxHealth = config.getInt("sit-effects.healing.max-percent", 100);
-        sitHealthPerInterval = config.getInt("sit-effects.healing.amount", 1);
+    private void loadConfig() {
+        autoRotate = getConfig().getBoolean("auto-rotate");
+        signCheck = getConfig().getBoolean("sign-check");
+        distance = getConfig().getDouble("distance");
+        maxChairWidth = getConfig().getInt("max-chair-width");
+        notifyplayer = getConfig().getBoolean("notify-player");
+        ignoreIfBlockInHand = getConfig().getBoolean("ignore-if-item-in-hand");
 
-        sitPickupEnabled = config.getBoolean("sit-effects.itempickup.enabled", false);
+        sitHealEnabled = getConfig().getBoolean("sit-effects.healing.enabled", false);
+        sitHealInterval = getConfig().getInt("sit-effects.healing.interval", 20);
+        sitMaxHealth = getConfig().getInt("sit-effects.healing.max-percent", 100);
+        sitHealthPerInterval = getConfig().getInt("sit-effects.healing.amount", 1);
 
-        sitDisableAllCommands = config.getBoolean("sit-restrictions.commands.all");
-        sitDisabledCommands = new HashSet<>(config.getStringList("sit-restrictions.commands.list"));
+        sitPickupEnabled = getConfig().getBoolean("sit-effects.itempickup.enabled", false);
 
-        msgSitting = ChatColor.translateAlternateColorCodes('&', config.getString("messages.sitting"));
-        msgStanding = ChatColor.translateAlternateColorCodes('&', config.getString("messages.standing"));
-        msgOccupied = ChatColor.translateAlternateColorCodes('&', config.getString("messages.occupied"));
-        msgNoPerm = ChatColor.translateAlternateColorCodes('&', config.getString("messages.no-permission"));
-        msgEnabled = ChatColor.translateAlternateColorCodes('&', config.getString("messages.enabled"));
-        msgDisabled = ChatColor.translateAlternateColorCodes('&', config.getString("messages.disabled"));
-        msgReloaded = ChatColor.translateAlternateColorCodes('&', config.getString("messages.reloaded"));
-        msgCommandRestricted = ChatColor.translateAlternateColorCodes('&', config.getString("messages.command-restricted"));
+        sitDisableAllCommands = getConfig().getBoolean("sit-restrictions.commands.all");
+        sitDisabledCommands = new HashSet<>(getConfig().getStringList("sit-restrictions.commands.list"));
+
+        msgSitting = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.sitting"));
+        msgStanding = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.standing"));
+        msgOccupied = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.occupied"));
+        msgNoPerm = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.no-permission"));
+        msgEnabled = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.enabled"));
+        msgDisabled = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.disabled"));
+        msgReloaded = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.reloaded"));
+        msgCommandRestricted = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.command-restricted"));
 
         allowedBlocks = new ArrayList<>();
-        for (String s : config.getStringList("sit-blocks")) {
+        for (String s : getConfig().getStringList("sit-blocks")) {
             String type;
             double sh = 0.7;
             String tmp[] = s.split("[:]");
@@ -146,7 +151,7 @@ public class Chairs extends JavaPlugin {
         }
 
         validSigns = new ArrayList<>();
-        for (String type : config.getStringList("valid-signs")) {
+        for (String type : getConfig().getStringList("valid-signs")) {
             try {
                 validSigns.add(Material.matchMaterial(type));
             } catch (Exception e) {

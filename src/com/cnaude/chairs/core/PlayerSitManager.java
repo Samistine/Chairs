@@ -48,11 +48,9 @@ public class PlayerSitManager {
         if (plugin.getConfigData().isNotifyplayer()) {
             player.sendMessage(plugin.getConfigData().getMsgSitting());
         }
-        SitData sitdata = new SitData();
+        SitData sitdata = new SitData(player.getLocation(), blocktooccupy);
         Entity arrow = plugin.getNMSAccess().spawnArrow(sitlocation.getBlock().getLocation().add(0.5, 0, 0.5));
         sitdata.arrow = arrow;
-        sitdata.block = blocktooccupy;
-        sitdata.teleportloc = player.getLocation();
         int task = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
                 plugin,
                 new Runnable() {
@@ -75,7 +73,7 @@ public class PlayerSitManager {
     public void reSitPlayer(final Player player) {
         SitData sitdata = sit.get(player);
         sitdata.sitting = false;
-        Entity prevarrow = sit.get(player).arrow;
+        Entity prevarrow = sitdata.arrow;
         Entity arrow = plugin.getNMSAccess().spawnArrow(prevarrow.getLocation());
         arrow.setPassenger(player);
         sitdata.arrow = arrow;
@@ -93,7 +91,7 @@ public class PlayerSitManager {
 
     private boolean unsitPlayer(final Player player, boolean canCancel) {
         SitData sitdata = sit.get(player);
-        final PlayerChairUnsitEvent playerunsitevent = new PlayerChairUnsitEvent(player, sitdata.teleportloc.clone(), canCancel);
+        final PlayerChairUnsitEvent playerunsitevent = new PlayerChairUnsitEvent(player, sitdata.getSitlocation().clone(), canCancel);
         plugin.getServer().getPluginManager().callEvent(playerunsitevent);
         if (playerunsitevent.isCancelled() && playerunsitevent.canBeCancelled()) {
             return false;
@@ -103,7 +101,7 @@ public class PlayerSitManager {
         sitdata.arrow.remove();
         player.teleport(playerunsitevent.getTeleportLocation().clone());
         player.setSneaking(false);
-        sitblock.remove(sitdata.block);
+        sitblock.remove(sitdata.getSeat());
         plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
         sit.remove(player);
         if (plugin.getConfigData().isNotifyplayer()) {
@@ -112,14 +110,36 @@ public class PlayerSitManager {
         return true;
     }
 
-    private class SitData {
+    private static class SitData {
+
+        private final Location sitlocation;
+        private final Block seat;
 
         private boolean sitting;
         private Entity arrow;
-        private Location teleportloc;
-        private int resittask;
-        private Block block;
 
+        private int resittask;
+
+        public SitData(Location sitlocation, Block seat) {
+            this.sitlocation = sitlocation;
+            this.seat = seat;
+        }
+
+        public Location getSitlocation() {
+            return sitlocation;
+        }
+
+        public Block getSeat() {
+            return seat;
+        }
+
+        /*public SitData(boolean sitting, Entity arrow, Location sitlocation, int resittask, Block block) {
+         this.sitting = sitting;
+         this.arrow = arrow;
+         this.sitlocation = sitlocation;
+         this.resittask = resittask;
+         this.block = block;
+         }*/
     }
 
 }

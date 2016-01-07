@@ -23,20 +23,13 @@ public class ChairEffects {
     public ChairEffects(Chairs plugin) {
         this.plugin = plugin;
         this.configData = plugin.getConfigData();
-        if (configData.isSitHealEnabled()) {
-            startHealing();
-        }
-        if (configData.isSitPickupEnabled()) {
-            startPickup();
-        }
+        start();
     }
 
-    public void reload() {
-        cancelHealing();
+    private void start() {
         if (configData.isSitHealEnabled()) {
             startHealing();
         }
-        cancelPickup();
         if (configData.isSitPickupEnabled()) {
             startPickup();
         }
@@ -45,6 +38,11 @@ public class ChairEffects {
     public void stop() {
         cancelHealing();
         cancelPickup();
+    }
+
+    public void reload() {
+        stop();
+        start();
     }
 
     private void startHealing() {

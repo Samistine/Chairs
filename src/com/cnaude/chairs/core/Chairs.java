@@ -21,10 +21,11 @@ import com.cnaude.chairs.listeners.TryUnsitEventListener;
 import com.cnaude.chairs.sitaddons.ChairEffects;
 import com.cnaude.chairs.sitaddons.CommandRestrict;
 import com.cnaude.chairs.vehiclearrow.NMSAccess;
+import java.util.UUID;
 
 public class Chairs extends JavaPlugin {
 
-    public HashSet<String> sitDisabled = new HashSet<>();
+    public HashSet<UUID> sitDisabled = new HashSet<>();
     public ChairEffects chairEffects;
     public List<ChairBlock> allowedBlocks;
     public List<Material> validSigns;

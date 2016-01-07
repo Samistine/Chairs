@@ -61,11 +61,11 @@ public class ChairEffects {
     }
 
     private double getPlayerHealth(Player player) {
-        return ((Damageable) player).getHealth();
+        return player.getHealth();
     }
 
     private double getMaxPlayerHealth(Player player) {
-        return ((Damageable) player).getMaxHealth();
+        return player.getMaxHealth();
     }
 
     public void startPickup() {

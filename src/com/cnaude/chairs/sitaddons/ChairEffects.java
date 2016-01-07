@@ -23,7 +23,7 @@ public class ChairEffects {
     }
 
     public void startHealing() {
-        healEffectsTask();
+        healTaskID = new HealEffectsTask().runTaskTimer(plugin, plugin.getSitHealInterval(), plugin.getSitHealInterval()).getTaskId();
     }
 
     public void cancelHealing() {
@@ -38,10 +38,6 @@ public class ChairEffects {
         startHealing();
     }
 
-    private void healEffectsTask() {
-        healTaskID = new HealEffectsTask().runTaskTimer(plugin, plugin.getSitHealInterval(), plugin.getSitHealInterval()).getTaskId();
-    }
-
     private double getPlayerHealth(Player player) {
         return player.getHealth();
     }
@@ -51,7 +47,7 @@ public class ChairEffects {
     }
 
     public void startPickup() {
-        pickupEffectsTask();
+        pickupTaskID = new PickupEffectsTask().runTaskTimer(plugin, 0, 1).getTaskId();
     }
 
     public void cancelPickup() {
@@ -64,10 +60,6 @@ public class ChairEffects {
     public void restartPickup() {
         cancelPickup();
         startPickup();
-    }
-
-    private void pickupEffectsTask() {
-        pickupTaskID = new PickupEffectsTask().runTaskTimer(plugin, 0, 1).getTaskId();
     }
 
     private class HealEffectsTask extends BukkitRunnable {

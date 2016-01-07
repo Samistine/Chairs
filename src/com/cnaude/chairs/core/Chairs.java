@@ -40,7 +40,6 @@ public class Chairs extends JavaPlugin {
 	public boolean sitPickupEnabled;
 	public boolean sitDisableAllCommands = false;
 	public HashSet<String> sitDisabledCommands = new HashSet<String>();
-	private Logger log;
 	public String msgSitting, msgStanding, msgOccupied, msgNoPerm, msgReloaded, msgDisabled, msgEnabled, msgCommandRestricted;
 
 
@@ -55,7 +54,6 @@ public class Chairs extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		log = this.getLogger();
 		try {
 			nmsaccess.setupChairsArrow();
 		} catch (Exception e) {
@@ -96,7 +94,6 @@ public class Chairs extends JavaPlugin {
 			chairEffects.cancelPickup();
 			chairEffects = null;
 		}
-		log = null;
 		nmsaccess = null;
 		psitdata = null;
 	}
@@ -159,11 +156,11 @@ public class Chairs extends JavaPlugin {
 	}
 
 	public void logInfo(String _message) {
-		log.log(Level.INFO, _message);
+		getLogger().log(Level.INFO, _message);
 	}
 
 	public void logError(String _message) {
-		log.log(Level.SEVERE, _message);
+		getLogger().log(Level.SEVERE, _message);
 	}
 
 }

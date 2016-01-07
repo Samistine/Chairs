@@ -131,10 +131,9 @@ public class Chairs extends JavaPlugin {
 
         allowedBlocks = new ArrayList<>();
         for (String s : getConfig().getStringList("sit-blocks")) {
-            String type;
             double sh = 0.7;
             String tmp[] = s.split("[:]");
-            type = tmp[0];
+            String type = tmp[0];
             if (tmp.length == 2) {
                 sh = Double.parseDouble(tmp[1]);
             }

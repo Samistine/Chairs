@@ -10,7 +10,7 @@ public class ChairsAPI {
 
     private static PlayerSitData pdata;
 
-    protected static void init(PlayerSitData pdata) {
+    public static void init(PlayerSitData pdata) {
         ChairsAPI.pdata = pdata;
     }
 

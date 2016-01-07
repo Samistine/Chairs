@@ -1,5 +1,6 @@
 package com.cnaude.chairs.core;
 
+import com.cnaude.chairs.api.ChairsAPI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,7 +75,7 @@ public class Chairs extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TryUnsitEventListener(this), this);
         getServer().getPluginManager().registerEvents(new CommandRestrict(this), this);
         getCommand("chairs").setExecutor(new ChairsCommand(this));
-        new APIInit().initAPI(getPlayerSitData());
+        ChairsAPI.init(getPlayerSitData());
     }
 
     @Override

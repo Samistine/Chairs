@@ -38,14 +38,6 @@ public class ChairEffects {
         startHealing();
     }
 
-    private double getPlayerHealth(Player player) {
-        return player.getHealth();
-    }
-
-    private double getMaxPlayerHealth(Player player) {
-        return player.getMaxHealth();
-    }
-
     public void startPickup() {
         pickupTaskID = new PickupEffectsTask().runTaskTimer(plugin, 0, 1).getTaskId();
     }
@@ -80,6 +72,14 @@ public class ChairEffects {
                     }
                 }
             }
+        }
+
+        private double getPlayerHealth(Player player) {
+            return player.getHealth();
+        }
+
+        private double getMaxPlayerHealth(Player player) {
+            return player.getMaxHealth();
         }
     }
 

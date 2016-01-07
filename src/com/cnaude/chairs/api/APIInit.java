@@ -4,8 +4,8 @@ import com.cnaude.chairs.core.PlayerSitData;
 
 public class APIInit {
 
-	public void initAPI(PlayerSitData data) {
-		ChairsAPI.init(data);
-	}
+    public void initAPI(PlayerSitData data) {
+        ChairsAPI.init(data);
+    }
 
 }

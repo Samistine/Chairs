@@ -9,15 +9,15 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 
 public class NMSChairsArrow extends EntityArrow {
 
-	public NMSChairsArrow(CraftWorld cworld, Location location) {
-		super(cworld.getHandle());
-		setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-		world.addEntity(this);
-		bukkitEntity = new CraftChairsArrow((CraftServer) Bukkit.getServer(), this);
-	}
+    public NMSChairsArrow(CraftWorld cworld, Location location) {
+        super(cworld.getHandle());
+        setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        world.addEntity(this);
+        bukkitEntity = new CraftChairsArrow((CraftServer) Bukkit.getServer(), this);
+    }
 
-	@Override
-	public void t_() {
-	}
+    @Override
+    public void t_() {
+    }
 
 }

@@ -12,108 +12,109 @@ import com.cnaude.chairs.api.PlayerChairUnsitEvent;
 
 public class PlayerSitData {
 
-	private Chairs plugin;
-	public PlayerSitData(Chairs plugin) {
-		this.plugin = plugin;
-	}
+    private Chairs plugin;
 
-	private HashMap<Player, SitData> sit = new HashMap<Player, SitData>();
-	private HashMap<Block, Player> sitblock = new HashMap<Block, Player>();
+    public PlayerSitData(Chairs plugin) {
+        this.plugin = plugin;
+    }
 
-	public boolean isSitting(Player player) {
-		return sit.containsKey(player) && sit.get(player).sitting;
-	}
+    private HashMap<Player, SitData> sit = new HashMap<Player, SitData>();
+    private HashMap<Block, Player> sitblock = new HashMap<Block, Player>();
 
-	public boolean isBlockOccupied(Block block) {
-		return sitblock.containsKey(block);
-	}
+    public boolean isSitting(Player player) {
+        return sit.containsKey(player) && sit.get(player).sitting;
+    }
 
-	public Player getPlayerOnChair(Block chair) {
-		return sitblock.get(chair);
-	}
+    public boolean isBlockOccupied(Block block) {
+        return sitblock.containsKey(block);
+    }
 
-	public boolean sitPlayer(final Player player,  Block blocktooccupy, Location sitlocation) {
-		PlayerChairSitEvent playersitevent = new PlayerChairSitEvent(player, sitlocation.clone());
-		plugin.getServer().getPluginManager().callEvent(playersitevent);
-		if (playersitevent.isCancelled()) {
-			return false;
-		}
-		sitlocation = playersitevent.getSitLocation().clone();
-		if (plugin.notifyplayer) {
-			player.sendMessage(plugin.msgSitting);
-		}
-		SitData sitdata = new SitData();
-		Entity arrow = plugin.getNMSAccess().spawnArrow(sitlocation.getBlock().getLocation().add(0.5, 0 , 0.5));
-		sitdata.arrow = arrow;
-		sitdata.block = blocktooccupy;
-		sitdata.teleportloc = player.getLocation();
-		int task = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
-			plugin,
-			new Runnable() {
-				@Override
-				public void run() {
-					reSitPlayer(player);
-				}
-			},
-			1000, 1000
-		);
-		sitdata.resittask = task;
-		player.teleport(sitlocation);
-		arrow.setPassenger(player);
-		sit.put(player, sitdata);
-		sitblock.put(blocktooccupy, player);
-		sitdata.sitting = true;
-		return true;
-	}
+    public Player getPlayerOnChair(Block chair) {
+        return sitblock.get(chair);
+    }
 
-	public void reSitPlayer(final Player player) {
-		SitData sitdata = sit.get(player);
-		sitdata.sitting = false;
-		Entity prevarrow = sit.get(player).arrow;
-		Entity arrow = plugin.getNMSAccess().spawnArrow(prevarrow.getLocation());
-		arrow.setPassenger(player);
-		sitdata.arrow = arrow;
-		prevarrow.remove();
-		sitdata.sitting = true;
-	}
+    public boolean sitPlayer(final Player player, Block blocktooccupy, Location sitlocation) {
+        PlayerChairSitEvent playersitevent = new PlayerChairSitEvent(player, sitlocation.clone());
+        plugin.getServer().getPluginManager().callEvent(playersitevent);
+        if (playersitevent.isCancelled()) {
+            return false;
+        }
+        sitlocation = playersitevent.getSitLocation().clone();
+        if (plugin.notifyplayer) {
+            player.sendMessage(plugin.msgSitting);
+        }
+        SitData sitdata = new SitData();
+        Entity arrow = plugin.getNMSAccess().spawnArrow(sitlocation.getBlock().getLocation().add(0.5, 0, 0.5));
+        sitdata.arrow = arrow;
+        sitdata.block = blocktooccupy;
+        sitdata.teleportloc = player.getLocation();
+        int task = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        reSitPlayer(player);
+                    }
+                },
+                1000, 1000
+        );
+        sitdata.resittask = task;
+        player.teleport(sitlocation);
+        arrow.setPassenger(player);
+        sit.put(player, sitdata);
+        sitblock.put(blocktooccupy, player);
+        sitdata.sitting = true;
+        return true;
+    }
 
-	public boolean unsitPlayer(Player player) {
-		return unsitPlayer(player, true);
-	}
+    public void reSitPlayer(final Player player) {
+        SitData sitdata = sit.get(player);
+        sitdata.sitting = false;
+        Entity prevarrow = sit.get(player).arrow;
+        Entity arrow = plugin.getNMSAccess().spawnArrow(prevarrow.getLocation());
+        arrow.setPassenger(player);
+        sitdata.arrow = arrow;
+        prevarrow.remove();
+        sitdata.sitting = true;
+    }
 
-	public void unsitPlayerForce(Player player) {
-		unsitPlayer(player, false);
-	}
+    public boolean unsitPlayer(Player player) {
+        return unsitPlayer(player, true);
+    }
 
-	private boolean unsitPlayer(final Player player, boolean canCancel) {
-		SitData sitdata = sit.get(player);
-		final PlayerChairUnsitEvent playerunsitevent = new PlayerChairUnsitEvent(player, sitdata.teleportloc.clone(), canCancel);
-		plugin.getServer().getPluginManager().callEvent(playerunsitevent);
-		if (playerunsitevent.isCancelled() && playerunsitevent.canBeCancelled()) {
-			return false;
-		}
-		sitdata.sitting = false;
-		player.leaveVehicle();
-		sitdata.arrow.remove();
-		player.teleport(playerunsitevent.getTeleportLocation().clone());
-		player.setSneaking(false);
-		sitblock.remove(sitdata.block);
-		plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
-		sit.remove(player);
-		if (plugin.notifyplayer) {
-			player.sendMessage(plugin.msgStanding);
-		}
-		return true;
-	}
+    public void unsitPlayerForce(Player player) {
+        unsitPlayer(player, false);
+    }
 
-	private class SitData {
+    private boolean unsitPlayer(final Player player, boolean canCancel) {
+        SitData sitdata = sit.get(player);
+        final PlayerChairUnsitEvent playerunsitevent = new PlayerChairUnsitEvent(player, sitdata.teleportloc.clone(), canCancel);
+        plugin.getServer().getPluginManager().callEvent(playerunsitevent);
+        if (playerunsitevent.isCancelled() && playerunsitevent.canBeCancelled()) {
+            return false;
+        }
+        sitdata.sitting = false;
+        player.leaveVehicle();
+        sitdata.arrow.remove();
+        player.teleport(playerunsitevent.getTeleportLocation().clone());
+        player.setSneaking(false);
+        sitblock.remove(sitdata.block);
+        plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
+        sit.remove(player);
+        if (plugin.notifyplayer) {
+            player.sendMessage(plugin.msgStanding);
+        }
+        return true;
+    }
 
-		private boolean sitting;
-		private Entity arrow;
-		private Location teleportloc;
-		private int resittask;
-		private Block block;
+    private class SitData {
 
-	}
+        private boolean sitting;
+        private Entity arrow;
+        private Location teleportloc;
+        private int resittask;
+        private Block block;
+
+    }
 
 }

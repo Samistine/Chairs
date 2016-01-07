@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 
 public class Utils {
 
-	public static Player[] getOnlinePlayers() {
-		return Bukkit.getOnlinePlayers();
-	}
+    public static Player[] getOnlinePlayers() {
+        return Bukkit.getOnlinePlayers();
+    }
 
 }

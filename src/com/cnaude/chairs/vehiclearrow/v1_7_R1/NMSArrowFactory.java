@@ -10,11 +10,11 @@ import com.cnaude.chairs.vehiclearrow.NMSArrowFactoryInterface;
 
 public class NMSArrowFactory implements NMSArrowFactoryInterface {
 
-	@Override
-	public Arrow spawnArrow(Location location) {
-		CraftWorld world = (CraftWorld) location.getWorld();
-		EntityArrow arrow = new NMSChairsArrow(world, location);
-		return (Arrow) arrow.getBukkitEntity();
-	}
+    @Override
+    public Arrow spawnArrow(Location location) {
+        CraftWorld world = (CraftWorld) location.getWorld();
+        EntityArrow arrow = new NMSChairsArrow(world, location);
+        return (Arrow) arrow.getBukkitEntity();
+    }
 
 }

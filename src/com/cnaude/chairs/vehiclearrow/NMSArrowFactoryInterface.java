@@ -5,6 +5,6 @@ import org.bukkit.entity.Arrow;
 
 public interface NMSArrowFactoryInterface {
 
-	public Arrow spawnArrow(Location location);
+    public Arrow spawnArrow(Location location);
 
 }

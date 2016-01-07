@@ -12,19 +12,19 @@ import com.cnaude.chairs.api.ChairsAPI;
 
 public class CraftChairsArrow extends CraftArrow implements Vehicle {
 
-	public CraftChairsArrow(CraftServer server, EntityArrow entity) {
-		super(server, entity);
-	}
+    public CraftChairsArrow(CraftServer server, EntityArrow entity) {
+        super(server, entity);
+    }
 
-	@Override
-	public void remove() {
-		Entity passenger = getPassenger();
-		if (passenger != null && passenger instanceof Player) {
-			if (ChairsAPI.isSitting((Player) passenger)) {
-				return;
-			}
-		}
-		super.remove();
-	}
+    @Override
+    public void remove() {
+        Entity passenger = getPassenger();
+        if (passenger != null && passenger instanceof Player) {
+            if (ChairsAPI.isSitting((Player) passenger)) {
+                return;
+            }
+        }
+        super.remove();
+    }
 
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.cnaude.chairs.api.PlayerChairSitEvent;
 import com.cnaude.chairs.api.PlayerChairUnsitEvent;
+import java.util.Set;
 
 public class PlayerSitData {
 
@@ -23,6 +24,10 @@ public class PlayerSitData {
 
     public boolean isSitting(Player player) {
         return sit.containsKey(player) && sit.get(player).sitting;
+    }
+
+    public Set<Player> getSittingPlayers() {
+        return sit.keySet();
     }
 
     public boolean isBlockOccupied(Block block) {

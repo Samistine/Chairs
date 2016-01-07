@@ -1,13 +1,8 @@
 package com.cnaude.chairs.core;
 
 import com.cnaude.chairs.api.ChairsAPI;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.logging.Level;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,20 +19,7 @@ public class Chairs extends JavaPlugin {
 
     private HashSet<UUID> sitDisabled = new HashSet<>();
     private ChairEffects chairEffects;
-    private List<ChairBlock> allowedBlocks;
-    private List<Material> validSigns;
-    private boolean autoRotate, signCheck, notifyplayer;
-    private boolean ignoreIfBlockInHand;
-    private double distance;
-    private int maxChairWidth;
-    private boolean sitHealEnabled;
-    private int sitMaxHealth;
-    private int sitHealthPerInterval;
-    private int sitHealInterval;
-    private boolean sitPickupEnabled;
-    private boolean sitDisableAllCommands = false;
-    private HashSet<String> sitDisabledCommands = new HashSet<>();
-    private String msgSitting, msgStanding, msgOccupied, msgNoPerm, msgReloaded, msgDisabled, msgEnabled, msgCommandRestricted;
+    private ConfigData configData;
 
     private PlayerSitData psitdata;
 
@@ -61,13 +43,12 @@ public class Chairs extends JavaPlugin {
         }
         chairEffects = new ChairEffects(this);
         psitdata = new PlayerSitData(this);
-        getConfig().options().copyDefaults(true);
-        saveConfig();
-        loadConfig();
-        if (sitHealEnabled) {
+
+        configData = new ConfigData(this);
+        if (configData.isSitHealEnabled()) {
             chairEffects.startHealing();
         }
-        if (sitPickupEnabled) {
+        if (configData.isSitPickupEnabled()) {
             chairEffects.startPickup();
         }
         getServer().getPluginManager().registerEvents(new NANLoginListener(), this);
@@ -96,64 +77,26 @@ public class Chairs extends JavaPlugin {
         psitdata = null;
     }
 
-    @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-        loadConfig();
+    /**
+     * Handles all the aspects of reloading the plugin if you change the config
+     * file and want the plugin to act accordingly to your new settings
+     */
+    public void reload() {
+        configData.reload();
+        if (configData.isSitHealEnabled()) {
+            chairEffects.restartHealing();
+        } else {
+            chairEffects.cancelHealing();
+        }
+        if (configData.isSitPickupEnabled()) {
+            chairEffects.restartPickup();
+        } else {
+            chairEffects.cancelPickup();
+        }
     }
 
-    private void loadConfig() {
-        autoRotate = getConfig().getBoolean("auto-rotate");
-        signCheck = getConfig().getBoolean("sign-check");
-        distance = getConfig().getDouble("distance");
-        maxChairWidth = getConfig().getInt("max-chair-width");
-        notifyplayer = getConfig().getBoolean("notify-player");
-        ignoreIfBlockInHand = getConfig().getBoolean("ignore-if-item-in-hand");
-
-        sitHealEnabled = getConfig().getBoolean("sit-effects.healing.enabled", false);
-        sitHealInterval = getConfig().getInt("sit-effects.healing.interval", 20);
-        sitMaxHealth = getConfig().getInt("sit-effects.healing.max-percent", 100);
-        sitHealthPerInterval = getConfig().getInt("sit-effects.healing.amount", 1);
-
-        sitPickupEnabled = getConfig().getBoolean("sit-effects.itempickup.enabled", false);
-
-        sitDisableAllCommands = getConfig().getBoolean("sit-restrictions.commands.all");
-        sitDisabledCommands = new HashSet<>(getConfig().getStringList("sit-restrictions.commands.list"));
-
-        msgSitting = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.sitting"));
-        msgStanding = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.standing"));
-        msgOccupied = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.occupied"));
-        msgNoPerm = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.no-permission"));
-        msgEnabled = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.enabled"));
-        msgDisabled = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.disabled"));
-        msgReloaded = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.reloaded"));
-        msgCommandRestricted = ChatColor.translateAlternateColorCodes('&', getConfig().getString("messages.command-restricted"));
-
-        allowedBlocks = new ArrayList<>();
-        for (String s : getConfig().getStringList("sit-blocks")) {
-            double sh = 0.7;
-            String tmp[] = s.split("[:]");
-            String type = tmp[0];
-            if (tmp.length == 2) {
-                sh = Double.parseDouble(tmp[1]);
-            }
-            Material mat = Material.matchMaterial(type);
-            if (mat != null) {
-                logInfo("Allowed block: " + mat.toString() + " => " + sh);
-                allowedBlocks.add(new ChairBlock(mat, sh));
-            } else {
-                logError("Invalid block: " + type);
-            }
-        }
-
-        validSigns = new ArrayList<>();
-        for (String type : getConfig().getStringList("valid-signs")) {
-            try {
-                validSigns.add(Material.matchMaterial(type));
-            } catch (Exception e) {
-                logError(e.getMessage());
-            }
-        }
+    public ConfigData getConfigData() {
+        return configData;
     }
 
     /**
@@ -161,182 +104,6 @@ public class Chairs extends JavaPlugin {
      */
     public HashSet<UUID> getSitDisabled() {
         return sitDisabled;
-    }
-
-    /**
-     * @return the chairEffects
-     */
-    public ChairEffects getChairEffects() {
-        return chairEffects;
-    }
-
-    /**
-     * @return the allowedBlocks
-     */
-    public List<ChairBlock> getAllowedBlocks() {
-        return allowedBlocks;
-    }
-
-    /**
-     * @return the validSigns
-     */
-    public List<Material> getValidSigns() {
-        return validSigns;
-    }
-
-    /**
-     * @return the autoRotate
-     */
-    public boolean isAutoRotate() {
-        return autoRotate;
-    }
-
-    /**
-     * @return the signCheck
-     */
-    public boolean isSignCheck() {
-        return signCheck;
-    }
-
-    /**
-     * @return the notifyplayer
-     */
-    public boolean isNotifyplayer() {
-        return notifyplayer;
-    }
-
-    /**
-     * @return the ignoreIfBlockInHand
-     */
-    public boolean isIgnoreIfBlockInHand() {
-        return ignoreIfBlockInHand;
-    }
-
-    /**
-     * @return the distance
-     */
-    public double getDistance() {
-        return distance;
-    }
-
-    /**
-     * @return the maxChairWidth
-     */
-    public int getMaxChairWidth() {
-        return maxChairWidth;
-    }
-
-    /**
-     * @return the sitHealEnabled
-     */
-    public boolean isSitHealEnabled() {
-        return sitHealEnabled;
-    }
-
-    /**
-     * @return the sitMaxHealth
-     */
-    public int getSitMaxHealth() {
-        return sitMaxHealth;
-    }
-
-    /**
-     * @return the sitHealthPerInterval
-     */
-    public int getSitHealthPerInterval() {
-        return sitHealthPerInterval;
-    }
-
-    /**
-     * @return the sitHealInterval
-     */
-    public int getSitHealInterval() {
-        return sitHealInterval;
-    }
-
-    /**
-     * @return the sitPickupEnabled
-     */
-    public boolean isSitPickupEnabled() {
-        return sitPickupEnabled;
-    }
-
-    /**
-     * @return the sitDisableAllCommands
-     */
-    public boolean isSitDisableAllCommands() {
-        return sitDisableAllCommands;
-    }
-
-    /**
-     * @return the sitDisabledCommands
-     */
-    public HashSet<String> getSitDisabledCommands() {
-        return sitDisabledCommands;
-    }
-
-    /**
-     * @return the msgSitting
-     */
-    public String getMsgSitting() {
-        return msgSitting;
-    }
-
-    /**
-     * @return the msgStanding
-     */
-    public String getMsgStanding() {
-        return msgStanding;
-    }
-
-    /**
-     * @return the msgOccupied
-     */
-    public String getMsgOccupied() {
-        return msgOccupied;
-    }
-
-    /**
-     * @return the msgNoPerm
-     */
-    public String getMsgNoPerm() {
-        return msgNoPerm;
-    }
-
-    /**
-     * @return the msgReloaded
-     */
-    public String getMsgReloaded() {
-        return msgReloaded;
-    }
-
-    /**
-     * @return the msgDisabled
-     */
-    public String getMsgDisabled() {
-        return msgDisabled;
-    }
-
-    /**
-     * @return the msgEnabled
-     */
-    public String getMsgEnabled() {
-        return msgEnabled;
-    }
-
-    /**
-     * @return the msgCommandRestricted
-     */
-    public String getMsgCommandRestricted() {
-        return msgCommandRestricted;
-    }
-
-    private void logInfo(String _message) {
-        getLogger().log(Level.INFO, _message);
-    }
-
-    private void logError(String _message) {
-        getLogger().log(Level.SEVERE, _message);
     }
 
 }

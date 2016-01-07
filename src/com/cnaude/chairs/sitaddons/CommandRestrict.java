@@ -21,17 +21,17 @@ public class CommandRestrict implements Listener {
         Player player = event.getPlayer();
         String playercommand = event.getMessage().toLowerCase();
         if (plugin.getPlayerSitData().isSitting(player)) {
-            if (plugin.isSitDisableAllCommands()) {
+            if (plugin.getConfigData().isSitDisableAllCommands()) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getMsgCommandRestricted());
+                player.sendMessage(plugin.getConfigData().getMsgCommandRestricted());
                 return;
             }
-            for (String disabledCommand : plugin.getSitDisabledCommands()) {
+            for (String disabledCommand : plugin.getConfigData().getSitDisabledCommands()) {
                 if (disabledCommand.startsWith(playercommand)) {
                     String therest = playercommand.replace(disabledCommand, "");
                     if (therest.isEmpty() || therest.startsWith(" ")) {
                         event.setCancelled(true);
-                        player.sendMessage(plugin.getMsgCommandRestricted());
+                        player.sendMessage(plugin.getConfigData().getMsgCommandRestricted());
                         return;
                     }
                 }

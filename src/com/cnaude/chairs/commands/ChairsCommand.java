@@ -22,30 +22,20 @@ public class ChairsCommand implements CommandExecutor {
         }
         if (args[0].equalsIgnoreCase("reload")) {
             if (sender.hasPermission("chairs.reload")) {
-                plugin.reloadConfig();
-                if (plugin.isSitHealEnabled()) {
-                    plugin.getChairEffects().restartHealing();
-                } else {
-                    plugin.getChairEffects().cancelHealing();
-                }
-                if (plugin.isSitPickupEnabled()) {
-                    plugin.getChairEffects().restartPickup();
-                } else {
-                    plugin.getChairEffects().cancelPickup();
-                }
-                sender.sendMessage(plugin.getMsgReloaded());
+                plugin.reload();
+                sender.sendMessage(plugin.getConfigData().getMsgReloaded());
             } else {
-                sender.sendMessage(plugin.getMsgNoPerm());
+                sender.sendMessage(plugin.getConfigData().getMsgNoPerm());
             }
         }
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args[0].equalsIgnoreCase("off")) {
                 plugin.getSitDisabled().add(player.getUniqueId());
-                player.sendMessage(plugin.getMsgDisabled());
+                player.sendMessage(plugin.getConfigData().getMsgDisabled());
             } else if (args[0].equalsIgnoreCase("on")) {
                 plugin.getSitDisabled().remove(player.getUniqueId());
-                player.sendMessage(plugin.getMsgEnabled());
+                player.sendMessage(plugin.getConfigData().getMsgEnabled());
             }
         }
         return true;

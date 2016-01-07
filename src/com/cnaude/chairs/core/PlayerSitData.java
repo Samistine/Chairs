@@ -45,8 +45,8 @@ public class PlayerSitData {
             return false;
         }
         sitlocation = playersitevent.getSitLocation().clone();
-        if (plugin.isNotifyplayer()) {
-            player.sendMessage(plugin.getMsgSitting());
+        if (plugin.getConfigData().isNotifyplayer()) {
+            player.sendMessage(plugin.getConfigData().getMsgSitting());
         }
         SitData sitdata = new SitData();
         Entity arrow = plugin.getNMSAccess().spawnArrow(sitlocation.getBlock().getLocation().add(0.5, 0, 0.5));
@@ -106,8 +106,8 @@ public class PlayerSitData {
         sitblock.remove(sitdata.block);
         plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
         sit.remove(player);
-        if (plugin.isNotifyplayer()) {
-            player.sendMessage(plugin.getMsgStanding());
+        if (plugin.getConfigData().isNotifyplayer()) {
+            player.sendMessage(plugin.getConfigData().getMsgStanding());
         }
         return true;
     }

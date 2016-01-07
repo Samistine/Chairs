@@ -59,7 +59,7 @@ public class TrySitEventListener implements Listener {
         }
 
         // Check for item in hand
-        if (plugin.isIgnoreIfBlockInHand() && player.getItemInHand().getType() != Material.AIR) {
+        if (plugin.getConfigData().isIgnoreIfBlockInHand() && player.getItemInHand().getType() != Material.AIR) {
             return false;
         }
 
@@ -70,7 +70,7 @@ public class TrySitEventListener implements Listener {
 
         // Sit occupied check
         if (plugin.getPlayerSitData().isBlockOccupied(block)) {
-            player.sendMessage(plugin.getMsgOccupied().replace("%PLAYER%", plugin.getPlayerSitData().getPlayerOnChair(block).getName()));
+            player.sendMessage(plugin.getConfigData().getMsgOccupied().replace("%PLAYER%", plugin.getPlayerSitData().getPlayerOnChair(block).getName()));
             return false;
         }
 
@@ -103,7 +103,7 @@ public class TrySitEventListener implements Listener {
             }
 
             // Check for distance distance between player and chair.
-            if (plugin.getDistance() > 0 && player.getLocation().distance(block.getLocation().add(0.5, 0, 0.5)) > plugin.getDistance()) {
+            if (plugin.getConfigData().getDistance() > 0 && player.getLocation().distance(block.getLocation().add(0.5, 0, 0.5)) > plugin.getConfigData().getDistance()) {
                 return false;
             }
 
@@ -119,7 +119,7 @@ public class TrySitEventListener implements Listener {
             }
 
             // Check for signs (only for stairs)
-            if (plugin.isSignCheck() && stairs != null) {
+            if (plugin.getConfigData().isSignCheck() && stairs != null) {
                 boolean sign1 = false;
                 boolean sign2 = false;
 
@@ -137,7 +137,7 @@ public class TrySitEventListener implements Listener {
             }
 
             // Check for maximal chair width (only for stairs)
-            if (plugin.getMaxChairWidth() > 0 && stairs != null) {
+            if (plugin.getConfigData().getMaxChairWidth() > 0 && stairs != null) {
                 if (stairs.getDescendingDirection() == BlockFace.NORTH || stairs.getDescendingDirection() == BlockFace.SOUTH) {
                     chairwidth += getChairWidth(block, BlockFace.EAST);
                     chairwidth += getChairWidth(block, BlockFace.WEST);
@@ -146,7 +146,7 @@ public class TrySitEventListener implements Listener {
                     chairwidth += getChairWidth(block, BlockFace.SOUTH);
                 }
 
-                if (chairwidth > plugin.getMaxChairWidth()) {
+                if (chairwidth > plugin.getConfigData().getMaxChairWidth()) {
                     return false;
                 }
             }
@@ -160,7 +160,7 @@ public class TrySitEventListener implements Listener {
     private Location getSitLocation(Block block, Float playerYaw) {
         double sh = 0.7;
 
-        for (ChairBlock cb : plugin.getAllowedBlocks()) {
+        for (ChairBlock cb : plugin.getConfigData().getAllowedBlocks()) {
             if (cb.getMat().equals(block.getType())) {
                 sh = cb.getSitHeight();
                 break;
@@ -176,7 +176,7 @@ public class TrySitEventListener implements Listener {
         plocation.add(0.5D, (sh - 0.5D), 0.5D);
 
         // Rotate the player's view to the descending side of the block.
-        if (plugin.isAutoRotate() && stairs != null) {
+        if (plugin.getConfigData().isAutoRotate() && stairs != null) {
             switch (stairs.getDescendingDirection()) {
                 case NORTH: {
                     plocation.setYaw(180);
@@ -204,7 +204,7 @@ public class TrySitEventListener implements Listener {
     }
 
     private boolean isValidChair(Block block) {
-        for (ChairBlock cb : plugin.getAllowedBlocks()) {
+        for (ChairBlock cb : plugin.getConfigData().getAllowedBlocks()) {
             if (cb.getMat().equals(block.getType())) {
                 return true;
             }
@@ -220,7 +220,7 @@ public class TrySitEventListener implements Listener {
         int width = 0;
 
         // Go through the blocks next to the clicked block and check if there are any further stairs.
-        for (int i = 1; i <= plugin.getMaxChairWidth(); i++) {
+        for (int i = 1; i <= plugin.getConfigData().getMaxChairWidth(); i++) {
             Block relative = block.getRelative(face, i);
             if (relative.getState().getData() instanceof Stairs) {
                 if (isValidChair(relative) && ((Stairs) relative.getState().getData()).getDescendingDirection() == ((Stairs) block.getState().getData()).getDescendingDirection()) {
@@ -236,12 +236,12 @@ public class TrySitEventListener implements Listener {
 
     private boolean checkSign(Block block, BlockFace face) {
         // Go through the blocks next to the clicked block and check if are signs on the end.
-        for (int i = 1; i <= plugin.getMaxChairWidth() + 2; i++) {
+        for (int i = 1; i <= plugin.getConfigData().getMaxChairWidth() + 2; i++) {
             Block relative = block.getRelative(face, i);
             if (checkDirection(block, relative)) {
                 continue;
             }
-            return plugin.getValidSigns().contains(relative.getType());
+            return plugin.getConfigData().getValidSigns().contains(relative.getType());
         }
         return false;
     }
@@ -258,7 +258,7 @@ public class TrySitEventListener implements Listener {
     private boolean checkFrame(Block block, BlockFace face, Player player) {
         // Go through the blocks next to the clicked block and check if are signs on the end.
 
-        for (int i = 1; i <= plugin.getMaxChairWidth() + 2; i++) {
+        for (int i = 1; i <= plugin.getConfigData().getMaxChairWidth() + 2; i++) {
             Block relative = block.getRelative(face, i);
             if (checkDirection(block, relative)) {
                 continue;
@@ -267,8 +267,8 @@ public class TrySitEventListener implements Listener {
                 int x = relative.getLocation().getBlockX();
                 int y = relative.getLocation().getBlockY();
                 int z = relative.getLocation().getBlockZ();
-                for (Entity e : player.getNearbyEntities(plugin.getDistance(), plugin.getDistance(), plugin.getDistance())) {
-                    if (e instanceof ItemFrame && plugin.getValidSigns().contains(Material.ITEM_FRAME)) {
+                for (Entity e : player.getNearbyEntities(plugin.getConfigData().getDistance(), plugin.getConfigData().getDistance(), plugin.getConfigData().getDistance())) {
+                    if (e instanceof ItemFrame && plugin.getConfigData().getValidSigns().contains(Material.ITEM_FRAME)) {
                         int x2 = e.getLocation().getBlockX();
                         int y2 = e.getLocation().getBlockY();
                         int z2 = e.getLocation().getBlockZ();

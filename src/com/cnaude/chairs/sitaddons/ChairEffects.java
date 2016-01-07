@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ChairEffects {
 
     private Chairs plugin;
-    ConfigData configData;
+    private ConfigData configData;
     private int healTaskID = -1;
     private int pickupTaskID = -1;
 

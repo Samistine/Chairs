@@ -21,9 +21,9 @@ public class Chairs extends JavaPlugin {
     private ChairEffects chairEffects;
     private ConfigData configData;
 
-    private PlayerSitData psitdata;
+    private PlayerSitManager psitdata;
 
-    public PlayerSitData getPlayerSitData() {
+    public PlayerSitManager getPlayerSitData() {
         return psitdata;
     }
     private NMSAccess nmsaccess = new NMSAccess();
@@ -42,7 +42,7 @@ public class Chairs extends JavaPlugin {
             return;
         }
         
-        psitdata = new PlayerSitData(this);
+        psitdata = new PlayerSitManager(this);
 
         configData = new ConfigData(this);
         chairEffects = new ChairEffects(this);

@@ -4,13 +4,13 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import com.cnaude.chairs.core.PlayerSitData;
+import com.cnaude.chairs.core.PlayerSitManager;
 
 public class ChairsAPI {
 
-    private static PlayerSitData pdata;
+    private static PlayerSitManager pdata;
 
-    public static void init(PlayerSitData pdata) {
+    public static void init(PlayerSitManager pdata) {
         ChairsAPI.pdata = pdata;
     }
 

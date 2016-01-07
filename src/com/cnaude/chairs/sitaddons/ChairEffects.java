@@ -42,7 +42,7 @@ public class ChairEffects {
         healTaskID = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
-                for (Player p : Utils.getOnlinePlayers()) {
+                for (Player p : plugin.getPlayerSitData().getSittingPlayers()) {
                     if (plugin.getPlayerSitData().isSitting(p)) {
                         if (p.hasPermission("chairs.sit.health")) {
                             double pHealthPcnt = (getPlayerHealth(p)) / getMaxPlayerHealth(p) * 100d;

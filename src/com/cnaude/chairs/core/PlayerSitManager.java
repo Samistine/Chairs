@@ -23,7 +23,7 @@ public class PlayerSitManager {
     private HashMap<Block, Player> sitblock = new HashMap<>();
 
     public boolean isSitting(Player player) {
-        return sit.containsKey(player) && sit.get(player).sitting;
+        return sit.containsKey(player);
     }
 
     public Set<Player> getSittingPlayers() {
@@ -66,19 +66,17 @@ public class PlayerSitManager {
         arrow.setPassenger(player);
         sit.put(player, sitdata);
         sitblock.put(blocktooccupy, player);
-        sitdata.sitting = true;
         return true;
     }
 
     public void reSitPlayer(final Player player) {
-        SitData sitdata = sit.get(player);
-        sitdata.sitting = false;
+        SitData sitdata = sit.remove(player);
         Entity prevarrow = sitdata.arrow;
         Entity arrow = plugin.getNMSAccess().spawnArrow(prevarrow.getLocation());
         arrow.setPassenger(player);
         sitdata.arrow = arrow;
         prevarrow.remove();
-        sitdata.sitting = true;
+        sit.put(player, sitdata);
     }
 
     public boolean unsitPlayer(Player player) {
@@ -96,14 +94,13 @@ public class PlayerSitManager {
         if (playerunsitevent.isCancelled() && playerunsitevent.canBeCancelled()) {
             return false;
         }
-        sitdata.sitting = false;
+        sit.remove(player);
         player.leaveVehicle();
         sitdata.arrow.remove();
         player.teleport(playerunsitevent.getTeleportLocation().clone());
         player.setSneaking(false);
         sitblock.remove(sitdata.getSeat());
         plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
-        sit.remove(player);
         if (plugin.getConfigData().isNotifyplayer()) {
             player.sendMessage(plugin.getConfigData().getMsgStanding());
         }
@@ -115,7 +112,6 @@ public class PlayerSitManager {
         private final Location sitlocation;
         private final Block seat;
 
-        private boolean sitting;
         private Entity arrow;
 
         private int resittask;

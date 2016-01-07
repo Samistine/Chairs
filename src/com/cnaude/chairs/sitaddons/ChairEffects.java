@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.cnaude.chairs.core.Chairs;
-import com.cnaude.chairs.core.Utils;
 
 public class ChairEffects {
 
@@ -88,7 +87,7 @@ public class ChairEffects {
         pickupTaskID = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
-                for (Player p : Utils.getOnlinePlayers()) {
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
                     if (plugin.getPlayerSitData().isSitting(p)) {
                         for (Entity entity : p.getNearbyEntities(1, 2, 1)) {
                             if (entity instanceof Item) {

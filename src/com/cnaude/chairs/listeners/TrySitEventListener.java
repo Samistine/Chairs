@@ -241,11 +241,7 @@ public class TrySitEventListener implements Listener {
             if (checkDirection(block, relative)) {
                 continue;
             }
-            if (plugin.getValidSigns().contains(relative.getType())) {
-                return true;
-            } else {
-                return false;
-            }
+            return plugin.getValidSigns().contains(relative.getType());
         }
         return false;
     }

@@ -1,6 +1,5 @@
 package com.cnaude.chairs.core;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,12 +7,9 @@ import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.cnaude.chairs.api.APIInit;
 import com.cnaude.chairs.commands.ChairsCommand;
 import com.cnaude.chairs.listeners.NANLoginListener;
 import com.cnaude.chairs.listeners.TrySitEventListener;

@@ -41,16 +41,12 @@ public class Chairs extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        chairEffects = new ChairEffects(this);
+        
         psitdata = new PlayerSitData(this);
 
         configData = new ConfigData(this);
-        if (configData.isSitHealEnabled()) {
-            chairEffects.startHealing();
-        }
-        if (configData.isSitPickupEnabled()) {
-            chairEffects.startPickup();
-        }
+        chairEffects = new ChairEffects(this);
+
         getServer().getPluginManager().registerEvents(new NANLoginListener(), this);
         getServer().getPluginManager().registerEvents(new TrySitEventListener(this), this);
         getServer().getPluginManager().registerEvents(new TryUnsitEventListener(this), this);
@@ -69,8 +65,7 @@ public class Chairs extends JavaPlugin {
             }
         }
         if (chairEffects != null) {
-            chairEffects.cancelHealing();
-            chairEffects.cancelPickup();
+            chairEffects.stop();
             chairEffects = null;
         }
         nmsaccess = null;
@@ -83,16 +78,7 @@ public class Chairs extends JavaPlugin {
      */
     public void reload() {
         configData.reload();
-        if (configData.isSitHealEnabled()) {
-            chairEffects.restartHealing();
-        } else {
-            chairEffects.cancelHealing();
-        }
-        if (configData.isSitPickupEnabled()) {
-            chairEffects.restartPickup();
-        } else {
-            chairEffects.cancelPickup();
-        }
+        chairEffects.reload();
     }
 
     public ConfigData getConfigData() {

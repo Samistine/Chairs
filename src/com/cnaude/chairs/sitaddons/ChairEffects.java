@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import com.cnaude.chairs.core.Chairs;
+import com.cnaude.chairs.core.ConfigData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ChairEffects {
@@ -20,38 +21,56 @@ public class ChairEffects {
 
     public ChairEffects(Chairs plugin) {
         this.plugin = plugin;
+        ConfigData configData = plugin.getConfigData();
+        if (configData.isSitHealEnabled()) {
+            startHealing();
+        }
+        if (configData.isSitPickupEnabled()) {
+            startPickup();
+        }
     }
 
-    public void startHealing() {
+    public void reload() {
+        ConfigData configData = plugin.getConfigData();
+        if (configData.isSitHealEnabled()) {
+            cancelHealing();
+            startHealing();
+        } else {
+            cancelHealing();
+        }
+        if (configData.isSitPickupEnabled()) {
+            cancelPickup();
+            startPickup();
+        } else {
+            cancelPickup();
+        }
+    }
+
+    public void stop() {
+        cancelHealing();
+        cancelPickup();
+    }
+
+    private void startHealing() {
         healTaskID = new HealEffectsTask().runTaskTimer(plugin, plugin.getConfigData().getSitHealInterval(), plugin.getConfigData().getSitHealInterval()).getTaskId();
     }
 
-    public void cancelHealing() {
+    private void cancelHealing() {
         if (healTaskID != -1) {
             plugin.getServer().getScheduler().cancelTask(healTaskID);
             healTaskID = -1;
         }
     }
 
-    public void restartHealing() {
-        cancelHealing();
-        startHealing();
-    }
-
-    public void startPickup() {
+    private void startPickup() {
         pickupTaskID = new PickupEffectsTask().runTaskTimer(plugin, 0, 1).getTaskId();
     }
 
-    public void cancelPickup() {
+    private void cancelPickup() {
         if (pickupTaskID != -1) {
             plugin.getServer().getScheduler().cancelTask(pickupTaskID);
         }
         pickupTaskID = -1;
-    }
-
-    public void restartPickup() {
-        cancelPickup();
-        startPickup();
     }
 
     private class HealEffectsTask extends BukkitRunnable {

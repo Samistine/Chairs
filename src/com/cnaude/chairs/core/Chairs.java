@@ -331,11 +331,11 @@ public class Chairs extends JavaPlugin {
         return msgCommandRestricted;
     }
 
-    public void logInfo(String _message) {
+    private void logInfo(String _message) {
         getLogger().log(Level.INFO, _message);
     }
 
-    public void logError(String _message) {
+    private void logError(String _message) {
         getLogger().log(Level.SEVERE, _message);
     }
 

@@ -24,7 +24,7 @@ import com.cnaude.chairs.vehiclearrow.NMSAccess;
 
 public class Chairs extends JavaPlugin {
 
-    public HashSet<String> sitDisabled = new HashSet<String>();
+    public HashSet<String> sitDisabled = new HashSet<>();
     public ChairEffects chairEffects;
     public List<ChairBlock> allowedBlocks;
     public List<Material> validSigns;
@@ -38,7 +38,7 @@ public class Chairs extends JavaPlugin {
     public int sitHealInterval;
     public boolean sitPickupEnabled;
     public boolean sitDisableAllCommands = false;
-    public HashSet<String> sitDisabledCommands = new HashSet<String>();
+    public HashSet<String> sitDisabledCommands = new HashSet<>();
     public String msgSitting, msgStanding, msgOccupied, msgNoPerm, msgReloaded, msgDisabled, msgEnabled, msgCommandRestricted;
 
     private PlayerSitData psitdata;
@@ -115,7 +115,7 @@ public class Chairs extends JavaPlugin {
         sitPickupEnabled = config.getBoolean("sit-effects.itempickup.enabled", false);
 
         sitDisableAllCommands = config.getBoolean("sit-restrictions.commands.all");
-        sitDisabledCommands = new HashSet<String>(config.getStringList("sit-restrictions.commands.list"));
+        sitDisabledCommands = new HashSet<>(config.getStringList("sit-restrictions.commands.list"));
 
         msgSitting = ChatColor.translateAlternateColorCodes('&', config.getString("messages.sitting"));
         msgStanding = ChatColor.translateAlternateColorCodes('&', config.getString("messages.standing"));
@@ -126,7 +126,7 @@ public class Chairs extends JavaPlugin {
         msgReloaded = ChatColor.translateAlternateColorCodes('&', config.getString("messages.reloaded"));
         msgCommandRestricted = ChatColor.translateAlternateColorCodes('&', config.getString("messages.command-restricted"));
 
-        allowedBlocks = new ArrayList<ChairBlock>();
+        allowedBlocks = new ArrayList<>();
         for (String s : config.getStringList("sit-blocks")) {
             String type;
             double sh = 0.7;
@@ -144,7 +144,7 @@ public class Chairs extends JavaPlugin {
             }
         }
 
-        validSigns = new ArrayList<Material>();
+        validSigns = new ArrayList<>();
         for (String type : config.getStringList("valid-signs")) {
             try {
                 validSigns.add(Material.matchMaterial(type));

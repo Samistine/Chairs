@@ -18,8 +18,8 @@ public class PlayerSitData {
         this.plugin = plugin;
     }
 
-    private HashMap<Player, SitData> sit = new HashMap<Player, SitData>();
-    private HashMap<Block, Player> sitblock = new HashMap<Block, Player>();
+    private HashMap<Player, SitData> sit = new HashMap<>();
+    private HashMap<Block, Player> sitblock = new HashMap<>();
 
     public boolean isSitting(Player player) {
         return sit.containsKey(player) && sit.get(player).sitting;

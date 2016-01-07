@@ -32,17 +32,13 @@ public class ChairEffects {
 
     public void reload() {
         ConfigData configData = plugin.getConfigData();
+        cancelHealing();
         if (configData.isSitHealEnabled()) {
-            cancelHealing();
             startHealing();
-        } else {
-            cancelHealing();
         }
+        cancelPickup();
         if (configData.isSitPickupEnabled()) {
-            cancelPickup();
             startPickup();
-        } else {
-            cancelPickup();
         }
     }
 

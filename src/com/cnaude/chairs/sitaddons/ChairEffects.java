@@ -16,12 +16,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ChairEffects {
 
     private Chairs plugin;
+    ConfigData configData;
     private int healTaskID = -1;
     private int pickupTaskID = -1;
 
     public ChairEffects(Chairs plugin) {
         this.plugin = plugin;
-        ConfigData configData = plugin.getConfigData();
+        this.configData = plugin.getConfigData();
         if (configData.isSitHealEnabled()) {
             startHealing();
         }
@@ -31,7 +32,6 @@ public class ChairEffects {
     }
 
     public void reload() {
-        ConfigData configData = plugin.getConfigData();
         cancelHealing();
         if (configData.isSitHealEnabled()) {
             startHealing();

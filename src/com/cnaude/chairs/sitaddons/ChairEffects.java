@@ -72,7 +72,6 @@ public class ChairEffects {
         @Override
         public void run() {
             for (Player p : plugin.getPlayerSitData().getSittingPlayers()) {
-                if (plugin.getPlayerSitData().isSitting(p)) {
                     if (p.hasPermission("chairs.sit.health")) {
                         double pHealthPcnt = (getPlayerHealth(p)) / getMaxPlayerHealth(p) * 100d;
                         if ((pHealthPcnt < plugin.getConfigData().getSitMaxHealth()) && (getPlayerHealth(p) < getMaxPlayerHealth(p))) {
@@ -83,7 +82,6 @@ public class ChairEffects {
                             p.setHealth(newHealth);
                         }
                     }
-                }
             }
         }
 
@@ -100,8 +98,7 @@ public class ChairEffects {
 
         @Override
         public void run() {
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if (plugin.getPlayerSitData().isSitting(p)) {
+            for (Player p : plugin.getPlayerSitData().getSittingPlayers()) {
                     for (Entity entity : p.getNearbyEntities(1, 2, 1)) {
                         if (entity instanceof Item) {
                             Item item = (Item) entity;
@@ -142,7 +139,6 @@ public class ChairEffects {
                             entity.remove();
                         }
                     }
-                }
             }
         }
     }

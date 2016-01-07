@@ -1,6 +1,5 @@
 package com.cnaude.chairs.sitaddons;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
@@ -98,7 +97,7 @@ public class ChairEffects {
 								if (item.getPickupDelay() == 0) {
 									if (p.getInventory().firstEmpty() != -1) {
 										PlayerPickupItemEvent pickupevent = new PlayerPickupItemEvent(p, item, 0);
-										Bukkit.getPluginManager().callEvent(pickupevent);
+										plugin.getServer().getPluginManager().callEvent(pickupevent);
 										if (!pickupevent.isCancelled()) {
 											p.getInventory().addItem(item.getItemStack());
 											entity.remove();
@@ -113,18 +112,18 @@ public class ChairEffects {
 									if (p.getExpToLevel() < exptoadd) {
 										localexptoadd = p.getExpToLevel();
 										PlayerExpChangeEvent expchangeevent = new PlayerExpChangeEvent(p, localexptoadd);
-										Bukkit.getPluginManager().callEvent(expchangeevent);
+										plugin.getServer().getPluginManager().callEvent(expchangeevent);
 										p.giveExp(expchangeevent.getAmount());
 										if (p.getExpToLevel() <= 0) {
 											PlayerLevelChangeEvent levelchangeevent = new PlayerLevelChangeEvent(p, p.getLevel(), p.getLevel()+1);
-											Bukkit.getPluginManager().callEvent(levelchangeevent);
+											plugin.getServer().getPluginManager().callEvent(levelchangeevent);
 											p.setExp(0);
 											p.giveExpLevels(1);
 										}
 									} else {
 										localexptoadd = exptoadd;
 										PlayerExpChangeEvent expchangeevent = new PlayerExpChangeEvent(p, localexptoadd);
-										Bukkit.getPluginManager().callEvent(expchangeevent);
+										plugin.getServer().getPluginManager().callEvent(expchangeevent);
 										p.giveExp(expchangeevent.getAmount());
 									}
 									exptoadd -= localexptoadd;

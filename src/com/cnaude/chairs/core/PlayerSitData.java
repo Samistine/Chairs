@@ -2,7 +2,6 @@ package com.cnaude.chairs.core;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -35,7 +34,7 @@ public class PlayerSitData {
 
 	public boolean sitPlayer(final Player player,  Block blocktooccupy, Location sitlocation) {
 		PlayerChairSitEvent playersitevent = new PlayerChairSitEvent(player, sitlocation.clone());
-		Bukkit.getPluginManager().callEvent(playersitevent);
+		plugin.getServer().getPluginManager().callEvent(playersitevent);
 		if (playersitevent.isCancelled()) {
 			return false;
 		}
@@ -48,7 +47,7 @@ public class PlayerSitData {
 		sitdata.arrow = arrow;
 		sitdata.block = blocktooccupy;
 		sitdata.teleportloc = player.getLocation();
-		int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(
+		int task = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(
 			plugin,
 			new Runnable() {
 				@Override
@@ -89,7 +88,7 @@ public class PlayerSitData {
 	private boolean unsitPlayer(final Player player, boolean canCancel) {
 		SitData sitdata = sit.get(player);
 		final PlayerChairUnsitEvent playerunsitevent = new PlayerChairUnsitEvent(player, sitdata.teleportloc.clone(), canCancel);
-		Bukkit.getPluginManager().callEvent(playerunsitevent);
+		plugin.getServer().getPluginManager().callEvent(playerunsitevent);
 		if (playerunsitevent.isCancelled() && playerunsitevent.canBeCancelled()) {
 			return false;
 		}
@@ -99,7 +98,7 @@ public class PlayerSitData {
 		player.teleport(playerunsitevent.getTeleportLocation().clone());
 		player.setSneaking(false);
 		sitblock.remove(sitdata.block);
-		Bukkit.getScheduler().cancelTask(sitdata.resittask);
+		plugin.getServer().getScheduler().cancelTask(sitdata.resittask);
 		sit.remove(player);
 		if (plugin.notifyplayer) {
 			player.sendMessage(plugin.msgStanding);

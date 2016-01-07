@@ -46,8 +46,8 @@ public class ChairEffects {
                     if (plugin.getPlayerSitData().isSitting(p)) {
                         if (p.hasPermission("chairs.sit.health")) {
                             double pHealthPcnt = (getPlayerHealth(p)) / getMaxPlayerHealth(p) * 100d;
-                            if ((pHealthPcnt < plugin.sitMaxHealth) && (getPlayerHealth(p) < getMaxPlayerHealth(p))) {
-                                double newHealth = plugin.sitHealthPerInterval + getPlayerHealth(p);
+                            if ((pHealthPcnt < plugin.getSitMaxHealth()) && (getPlayerHealth(p) < getMaxPlayerHealth(p))) {
+                                double newHealth = plugin.getSitHealthPerInterval() + getPlayerHealth(p);
                                 if (newHealth > getMaxPlayerHealth(p)) {
                                     newHealth = getMaxPlayerHealth(p);
                                 }
@@ -57,7 +57,7 @@ public class ChairEffects {
                     }
                 }
             }
-        }, plugin.sitHealInterval, plugin.sitHealInterval);
+        }, plugin.getSitHealInterval(), plugin.getSitHealInterval());
     }
 
     private double getPlayerHealth(Player player) {

@@ -23,28 +23,28 @@ public class ChairsCommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("reload")) {
             if (sender.hasPermission("chairs.reload") || !(sender instanceof Player)) {
                 plugin.loadConfig();
-                if (plugin.sitHealEnabled) {
-                    plugin.chairEffects.restartHealing();
+                if (plugin.isSitHealEnabled()) {
+                    plugin.getChairEffects().restartHealing();
                 } else {
-                    plugin.chairEffects.cancelHealing();
+                    plugin.getChairEffects().cancelHealing();
                 }
-                if (plugin.sitPickupEnabled) {
-                    plugin.chairEffects.restartPickup();
+                if (plugin.isSitPickupEnabled()) {
+                    plugin.getChairEffects().restartPickup();
                 } else {
-                    plugin.chairEffects.cancelPickup();
+                    plugin.getChairEffects().cancelPickup();
                 }
-                sender.sendMessage(plugin.msgReloaded);
+                sender.sendMessage(plugin.getMsgReloaded());
             } else {
-                sender.sendMessage(plugin.msgNoPerm);
+                sender.sendMessage(plugin.getMsgNoPerm());
             }
         }
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (args[0].equalsIgnoreCase("off")) {
-                plugin.sitDisabled.add(player.getUniqueId());
+                plugin.getSitDisabled().add(player.getUniqueId());
                 player.sendMessage("Disabled sitting");
             } else if (args[0].equalsIgnoreCase("on")) {
-                plugin.sitDisabled.remove(player.getUniqueId());
+                plugin.getSitDisabled().remove(player.getUniqueId());
                 player.sendMessage("Enabled sitting");
             }
         }

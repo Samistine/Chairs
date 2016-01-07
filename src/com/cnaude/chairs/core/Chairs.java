@@ -25,22 +25,22 @@ import java.util.UUID;
 
 public class Chairs extends JavaPlugin {
 
-    public HashSet<UUID> sitDisabled = new HashSet<>();
-    public ChairEffects chairEffects;
-    public List<ChairBlock> allowedBlocks;
-    public List<Material> validSigns;
-    public boolean autoRotate, signCheck, notifyplayer;
-    public boolean ignoreIfBlockInHand;
-    public double distance;
-    public int maxChairWidth;
-    public boolean sitHealEnabled;
-    public int sitMaxHealth;
-    public int sitHealthPerInterval;
-    public int sitHealInterval;
-    public boolean sitPickupEnabled;
-    public boolean sitDisableAllCommands = false;
-    public HashSet<String> sitDisabledCommands = new HashSet<>();
-    public String msgSitting, msgStanding, msgOccupied, msgNoPerm, msgReloaded, msgDisabled, msgEnabled, msgCommandRestricted;
+    private HashSet<UUID> sitDisabled = new HashSet<>();
+    private ChairEffects chairEffects;
+    private List<ChairBlock> allowedBlocks;
+    private List<Material> validSigns;
+    private boolean autoRotate, signCheck, notifyplayer;
+    private boolean ignoreIfBlockInHand;
+    private double distance;
+    private int maxChairWidth;
+    private boolean sitHealEnabled;
+    private int sitMaxHealth;
+    private int sitHealthPerInterval;
+    private int sitHealInterval;
+    private boolean sitPickupEnabled;
+    private boolean sitDisableAllCommands = false;
+    private HashSet<String> sitDisabledCommands = new HashSet<>();
+    private String msgSitting, msgStanding, msgOccupied, msgNoPerm, msgReloaded, msgDisabled, msgEnabled, msgCommandRestricted;
 
     private PlayerSitData psitdata;
 
@@ -153,6 +153,181 @@ public class Chairs extends JavaPlugin {
                 logError(e.getMessage());
             }
         }
+    }
+
+    /**
+     * @return the sitDisabled
+     */
+    public HashSet<UUID> getSitDisabled() {
+        return sitDisabled;
+    }
+
+    /**
+     * @return the chairEffects
+     */
+    public ChairEffects getChairEffects() {
+        return chairEffects;
+    }
+
+    /**
+     * @return the allowedBlocks
+     */
+    public List<ChairBlock> getAllowedBlocks() {
+        return allowedBlocks;
+    }
+
+    /**
+     * @return the validSigns
+     */
+    public List<Material> getValidSigns() {
+        return validSigns;
+    }
+
+    /**
+     * @return the autoRotate
+     */
+    public boolean isAutoRotate() {
+        return autoRotate;
+    }
+
+    /**
+     * @return the signCheck
+     */
+    public boolean isSignCheck() {
+        return signCheck;
+    }
+
+    /**
+     * @return the notifyplayer
+     */
+    public boolean isNotifyplayer() {
+        return notifyplayer;
+    }
+
+    /**
+     * @return the ignoreIfBlockInHand
+     */
+    public boolean isIgnoreIfBlockInHand() {
+        return ignoreIfBlockInHand;
+    }
+
+    /**
+     * @return the distance
+     */
+    public double getDistance() {
+        return distance;
+    }
+
+    /**
+     * @return the maxChairWidth
+     */
+    public int getMaxChairWidth() {
+        return maxChairWidth;
+    }
+
+    /**
+     * @return the sitHealEnabled
+     */
+    public boolean isSitHealEnabled() {
+        return sitHealEnabled;
+    }
+
+    /**
+     * @return the sitMaxHealth
+     */
+    public int getSitMaxHealth() {
+        return sitMaxHealth;
+    }
+
+    /**
+     * @return the sitHealthPerInterval
+     */
+    public int getSitHealthPerInterval() {
+        return sitHealthPerInterval;
+    }
+
+    /**
+     * @return the sitHealInterval
+     */
+    public int getSitHealInterval() {
+        return sitHealInterval;
+    }
+
+    /**
+     * @return the sitPickupEnabled
+     */
+    public boolean isSitPickupEnabled() {
+        return sitPickupEnabled;
+    }
+
+    /**
+     * @return the sitDisableAllCommands
+     */
+    public boolean isSitDisableAllCommands() {
+        return sitDisableAllCommands;
+    }
+
+    /**
+     * @return the sitDisabledCommands
+     */
+    public HashSet<String> getSitDisabledCommands() {
+        return sitDisabledCommands;
+    }
+
+    /**
+     * @return the msgSitting
+     */
+    public String getMsgSitting() {
+        return msgSitting;
+    }
+
+    /**
+     * @return the msgStanding
+     */
+    public String getMsgStanding() {
+        return msgStanding;
+    }
+
+    /**
+     * @return the msgOccupied
+     */
+    public String getMsgOccupied() {
+        return msgOccupied;
+    }
+
+    /**
+     * @return the msgNoPerm
+     */
+    public String getMsgNoPerm() {
+        return msgNoPerm;
+    }
+
+    /**
+     * @return the msgReloaded
+     */
+    public String getMsgReloaded() {
+        return msgReloaded;
+    }
+
+    /**
+     * @return the msgDisabled
+     */
+    public String getMsgDisabled() {
+        return msgDisabled;
+    }
+
+    /**
+     * @return the msgEnabled
+     */
+    public String getMsgEnabled() {
+        return msgEnabled;
+    }
+
+    /**
+     * @return the msgCommandRestricted
+     */
+    public String getMsgCommandRestricted() {
+        return msgCommandRestricted;
     }
 
     public void logInfo(String _message) {

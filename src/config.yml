@@ -50,6 +50,7 @@ sit-restrictions:
     list:
     - /examplecommand
 notify-player: true
+debug: false
 messages:
   sitting: '&7You are now sitting.'
   standing: '&7You are no longer sitting.'

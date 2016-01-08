@@ -56,6 +56,7 @@ public class ConfigData {
     }
 
     private void load() {
+        boolean debug = config.getBoolean("debug", false);
         autoRotate = config.getBoolean("auto-rotate");
         signCheck = config.getBoolean("sign-check");
         distance = config.getDouble("distance");
@@ -92,7 +93,9 @@ public class ConfigData {
             }
             Material mat = Material.matchMaterial(type);
             if (mat != null) {
-                logger.log(Level.INFO, "Allowed block: {0} => {1}", new Object[]{mat.toString(), sh});
+                if (debug) {
+                    logger.log(Level.INFO, "Allowed block: {0} => {1}", new Object[]{mat.toString(), sh});
+                }
                 allowedBlocks.add(new ChairBlock(mat, sh));
             } else {
                 logger.log(Level.SEVERE, "Invalid block: {0}", type);
